@@ -1,7 +1,10 @@
 # CS231n
+
 [课程主页](http://cs231n.stanford.edu/)
 
 [中文课程](https://study.163.com/course/introduction/1003223001.htm)
+
+### 以下是关于本课程的几次作业，在我看来，这就是此课程的精华了，视频要看，但作业也要做。
 ### Assignment 1:
 - Q1: k-Nearest Neighbor classifier.
 - Q2: Training a Support Vector Machine. 
