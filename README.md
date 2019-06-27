@@ -1,5 +1,6 @@
 # CS231n
 [课程主页](http://cs231n.stanford.edu/)
+[中文课程](https://study.163.com/course/introduction/1003223001.htm)
 ### Assignment 1:
 - Q1: k-Nearest Neighbor classifier.
 - Q2: Training a Support Vector Machine. 
