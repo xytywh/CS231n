@@ -1,7 +1,7 @@
 # CS231n
-
-- Python3
-- Pytorch
+- [参考](https://github.com/lightaime/cs231n)
+- Python2-->Python3
+- TensorFlow-->Pytorch
 
 [课程主页](http://cs231n.stanford.edu/)
 
