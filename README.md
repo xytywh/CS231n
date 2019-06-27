@@ -1,2 +1,2 @@
 # CS231n
-CS231课程代码
+[课程主页](http://cs231n.stanford.edu/)
