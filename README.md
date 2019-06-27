@@ -1,6 +1,7 @@
 # CS231n
 
-* Python2-->Python3
+- Python3
+- Pytorch
 
 [课程主页](http://cs231n.stanford.edu/)
 
