@@ -1,5 +1,5 @@
 # CS231n
-
+* Python2-->Python3
 [课程主页](http://cs231n.stanford.edu/)
 
 [中文课程](https://study.163.com/course/introduction/1003223001.htm)
