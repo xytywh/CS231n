@@ -5,11 +5,9 @@
 - Python2-->Python3
 - TensorFlow-->Pytorch
 
-[课程主页](http://cs231n.stanford.edu/)
-
-[作业&笔记](http://cs231n.github.io/)
-
-[教学大纲&PPT&学习资料](http://cs231n.stanford.edu/syllabus.html)
+[[课程主页]](http://cs231n.stanford.edu/)
+[[作业&笔记]](http://cs231n.github.io/)
+[[教学大纲&PPT&学习资料]](http://cs231n.stanford.edu/syllabus.html)
 
 [中文课程](https://study.163.com/course/introduction/1003223001.htm)
 
