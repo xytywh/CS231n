@@ -1,6 +1,7 @@
 # CS231n
 - [代码参考](https://github.com/lightaime/cs231n)
-- [笔记](https://github.com/whyscience/CS231n-Note-Translation_CN)
+- [笔记-知乎](https://zhuanlan.zhihu.com/p/21930884)
+- [笔记-github](https://github.com/whyscience/CS231n-Note-Translation_CN)
 - Python2-->Python3
 - TensorFlow-->Pytorch
 
