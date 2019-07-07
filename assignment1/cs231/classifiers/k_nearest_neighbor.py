@@ -1,4 +1,5 @@
 import numpy as np
+import sklearn
 
 
 class KNearestNeighbor(object):
@@ -15,18 +16,18 @@ class KNearestNeighbor(object):
         Inputs:
         - X: A numpy array of shape (num_train, D) containing the training data
           consisting of num_train samples each of dimension D.
-        - y: A numpy array of shape (N,) containing the training labels, where
+        - y: A numpy array of shape (num_train,) containing the training labels, where
              y[i] is the label for X[i].
         """
         self.X_train = X
         self.y_train = y
 
-    def predict(self, X, k=1, num_loops=0):
+    def predict(self, X_test, k=1, num_loops=0, distance_type=2):
         """
         Predict labels for test data using this classifier.
 
         Inputs:
-        - X: A numpy array of shape (num_test, D) containing test data consisting
+        - X_test: A numpy array of shape (num_test, D) containing test data consisting
              of num_test samples each of dimension D.
         - k: The number of nearest neighbors that vote for the predicted labels.
         - num_loops: Determines which implementation to use to compute distances
@@ -37,17 +38,17 @@ class KNearestNeighbor(object):
           test data, where y[i] is the predicted label for the test point X[i].
         """
         if num_loops == 0:
-            dists = self.compute_distances_no_loops(X)
+            dists = self.compute_distances_no_loops(X_test, distance_type)
         elif num_loops == 1:
-            dists = self.compute_distances_one_loop(X)
+            dists = self.compute_distances_one_loop(X_test, distance_type)
         elif num_loops == 2:
-            dists = self.compute_distances_two_loops(X)
+            dists = self.compute_distances_two_loops(X_test, distance_type)
         else:
             raise ValueError('Invalid value %d for num_loops' % num_loops)
 
         return self.predict_labels(dists, k=k)
 
-    def compute_distances_no_loops(self, X_test):
+    def compute_distances_no_loops(self, X_test, distance_type=2):
         """
         Compute the distance between each test point in X_test and each training point
         in self.X_train using no explicit loops.
@@ -66,18 +67,31 @@ class KNearestNeighbor(object):
         # You should implement this function using only basic array operations; #
         # in particular you should not use functions from scipy.                #
         #                                                                       #
-        # HINT: Try to formulate the l2 distance using matrix multiplication    #
+        # HINT: Try to formulate the l2 and l1 distance using matrix multiplication    #
         #       and two broadcast sums.                                         #
         #########################################################################
         # pass
-        dists = np.sqrt(-2 * np.dot(X_test, self.X_train.T) + np.sum(np.square(self.X_train), axis=1) + np.transpose(
-            [np.sum(np.square(X_test), axis=1)]))
+        if distance_type == 2:
+
+            test_sum = np.sum(np.square(X_test), axis=1)  # (num_test,)
+            train_sum = np.sum(np.square(self.X_train), axis=1)  # (num_train,)
+            inner_product = np.dot(X_test, self.X_train.T)  # num_test x num_train
+            # print(test_sum.shape, train_sum.shape, inner_product.shape)
+            dists = np.sqrt(-2 * inner_product + train_sum + np.transpose([test_sum]))
+
+            # dists = np.sqrt(-2 * np.dot(X_test, self.X_train.T) + np.sum(np.square(self.X_train), axis=1) +
+            #                 np.transpose([np.sum(np.square(X_test), axis=1)]))
+
+        elif distance_type == 1:
+            # L1 distance I don't know how to realize
+            dists = np.sqrt(-2 * np.dot(X_test, self.X_train.T) + np.sum(np.square(self.X_train), axis=1) +
+                            np.transpose([np.sum(np.square(X_test), axis=1)]))
         #########################################################################
         #                         END OF YOUR CODE                              #
         #########################################################################
         return dists
 
-    def compute_distances_one_loop(self, X_test):
+    def compute_distances_one_loop(self, X_test, distance_type=2):
         """
         Compute the distance between each test point in X_test and each training point
         in self.X_train using a single loop over the test data.
@@ -94,20 +108,25 @@ class KNearestNeighbor(object):
             # points, and store the result in dists[i, :].                        #
             #######################################################################
             # pass
-            dists[i] = np.sqrt(np.sum(np.square(self.X_train - X_test[i]), axis=1))
+            if distance_type == 2:
+                dists[i] = np.sqrt(np.sum(np.square(self.X_train - X_test[i]), axis=1))
+                # dists[i] = np.sum(np.square(self.X_train - X_test[i]), axis=1)
+            elif distance_type == 1:
+                dists[i] = np.sum(np.abs(self.X_train - X_test[i]), axis=1)
+
             #######################################################################
             #                         END OF YOUR CODE                            #
             #######################################################################
         return dists
 
-    def compute_distances_two_loops(self, X_test):
+    def compute_distances_two_loops(self, X_test, distance_type=2):
         """
         Compute the distance between each test point in X_test and each training point
         in self.X_train using a nested loop over both the training data and the
         test data.
 
         Inputs:
-        - X: A numpy array of shape (num_test, D) containing test data.
+        - X_test: A numpy array of shape (num_test, D) containing test data.
 
         Returns:
         - dists: A numpy array of shape (num_test, num_train) where dists[i, j]
@@ -126,7 +145,11 @@ class KNearestNeighbor(object):
                 # not use a loop over dimension.                                    #
                 #####################################################################
                 # pass
-                dists[i][j] = np.sqrt(np.sum(np.square(X_test[i] - self.X_train[j])))
+                if distance_type == 2:
+                    dists[i][j] = np.sqrt(np.sum(np.square(X_test[i] - self.X_train[j])))
+                    # dists[i][j] = np.sum(np.square(X_test[i] - self.X_train[j]))
+                elif distance_type == 1:
+                    dists[i][j] = np.sum(np.abs(X_test[i] - self.X_train[j]))
                 #####################################################################
                 #                       END OF YOUR CODE                            #
                 #####################################################################
@@ -169,6 +192,7 @@ class KNearestNeighbor(object):
             # label.                                                                #
             #########################################################################
             # pass
+            # np.bincount返回的是0–序列最大值在这个array中出现的次数,array必须是一维且只包含非负整数
             y_pred[i] = np.argmax(np.bincount(closest_y))
             #########################################################################
             #                           END OF YOUR CODE                            #
